@@ -1,3 +1,3 @@
 # blkmtnmouth.github.io
 
-Assignment 2. Password Generator. 
+Assignment 3. JavaScript Quiz. 
