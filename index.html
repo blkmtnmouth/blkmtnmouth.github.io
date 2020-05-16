@@ -1,0 +1,40 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Javascript Quiz</title>
+  <meta name="description" content="JavascriptQuiz">
+  <meta name="author" content="SitePoint">
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+  <p id = "timer"></p>  
+    <div id="test">    
+        <h2></h2>
+        <br>
+        <button class="button button2" id="btnA" onClick = "checkUserChoice(0)">A: </button>
+        <br>
+        <button class="button button2" id="btnB" onClick = "checkUserChoice(1)">B: </button>
+        <br>
+        <button class="button button2" id="btnC" onClick = "checkUserChoice(2)">C: </button>
+        <br>
+        <button class="button button2" id="btnD" onClick = "checkUserChoice(3)">D: </button>
+        <br>
+    </div>
+    <form id="enter-highscores">
+      <input type = "text" name = "user-name" id="user-name" placeholder = "Your Name" />
+    </form> 
+    <button id="submit" onClick = "saveName()">Submit</button>
+    <div id="highscores">
+      <p><strong>User: </strong> <span id="name"></span><strong>     Score: </strong><span id="score"></span></p>
+    </div>
+    <a class="button button1" id="btnRestart" href="home.html">Restart</a>
+
+  <script src="script.js"></script>
+</body>
+</html>
