@@ -1,0 +1,107 @@
+<h1>Eat A Burger!</h1>
+
+<img src="/Develop/public/assets/img/burger.png", alt="picture of a burger">
+
+<h2> Add a Burger </h2>
+<form class="create-form">
+
+  <div class="form-group">
+    <label for="ca">New Burger:</label>
+    <input type="text" id="ca" name="name">
+    <button type="submit">Add Burger</button>
+  </div>
+  <script>
+    $(".create-form").on("submit", function(event) {
+        // Make sure to preventDefault on a submit event.
+        event.preventDefault();
+
+        var newBurger = {
+        burger_name: $("#ca").val().trim(),
+        };
+
+    // Send the POST request.
+    $.ajax("/api/burgers", {
+      type: "POST",
+      data: newBurger
+    }).then(
+      function() {
+        console.log("created new burger");
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    );
+  });
+  </script>
+
+</form>
+
+<h2>Burgers to Eat</h2>
+
+<ul>
+  {{#each burgers}}
+    {{#unless devoured}}
+    <li>
+	    {{burger_name}}
+	    
+      <button class="eat" data-id="{{id}}" data-eat="{{devoured}}">DEVOUR</button>
+    
+      <script>
+      $(".eat").on("click", function(event) {
+        var id = $(this).data("id"); 
+
+     
+      // Send the PUT request.
+      $.ajax("/api/burgers/" + id, {
+        type: "PUT",
+        data: id
+      }).then(
+        function() {
+          console.log("ate burger");
+          // Reload the page to get the updated list
+          location.reload();
+        }
+      );
+      
+      });
+      </script>
+    
+
+    </li>
+    {{/unless}}
+  {{/each}}
+</ul>
+
+<h2>Burgers You Ate</h2>
+
+<ul>
+  {{#each burgers}}
+    {{#if devoured}}
+    <li>
+	    {{burger_name}}
+    
+      <script>
+      $(".eat").on("click", function(event) {
+        var id = $(this).data("id"); 
+     
+      // Send the PUT request.
+      $.ajax("/api/burgers/" + id, {
+        type: "PUT",
+        data: id
+      }).then(
+        function() {
+          console.log("ate burger");
+          // Reload the page to get the updated list
+          location.reload();
+        }
+      );
+      
+      });
+      </script>
+
+    </li>
+    {{/if}}
+  {{/each}}
+</ul>
+
+
+
