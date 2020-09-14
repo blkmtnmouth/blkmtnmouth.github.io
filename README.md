@@ -1,15 +1,23 @@
-# Eat-A-burger
+# NoteTaker
+Description:
+Note taker is a simple app that lets you create, save and delete notes.
 
-### Instructions
-To use eat a burger app, Enter the burger you would like to eat and click add. The burger will pop up on the list of burgers you can devour. Click devour next to the burger you want to eat and it will move to the "devoured" list. 
-
-### Installation 
-Download the folder and execute "Node server.js" from command line
-
-### USAGE
-Free Usage
-
-### CONTRIBUTORS 
-
+Created by:
 Bryan Cook
 
+No license is required
+Testing: Passed
+
+Any questions, please ask.
+
+Install: 
+
+To install the app download the note taker app. Start the server using node server.js and then visit the local host:3000 page
+
+Usage:
+This app is used to take notes
+https://avatars0.githubusercontent.com/u/59021081?v=4
+https://github.com/blkmtnmouth
+
+
+Username - blkmtnmouth

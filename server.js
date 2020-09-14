@@ -1,31 +1,105 @@
-// require express
-var express = require("express"); 
-var path = require("path"); 
+// Dependencies
+// =============================================================
+var express = require("express");
+var path = require("path");
+const fs = require("fs");
+const { raw } = require("express");
 
-// Set up port
-var PORT = process.env.PORT || 3000; 
+// Sets up the Express App
+// =============================================================
+var app = express();
+var PORT = 3000;
 
-// Create express app
-var app = express(); 
-app.use(express.urlencoded({ extend: true})); 
-app.use(express.json()); 
+// Sets up the Express app to handle data parsing
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static(__dirname));
+console.log(__dirname);
 
-// Serve static content for the app from the "public" directory in the application directory.
-app.use(express.static("public"));
+// Routes
+// =============================================================
 
-// Set Handlebars.
-var exphbs = require("express-handlebars");
+// Basic route that sends the user first to the AJAX Page
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "index.html"));
+  console.log(__dirname);
+});
 
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
+app.get("/notes", function (req, res) {
+  res.sendFile(path.join(__dirname, "./public/notes.html"));
+});
 
-// Import routes and give the server access to them.
-var routes = require("./controllers/burgers_controller.js");
+// Displays all notes
+app.get("/api/notes", function (req, res) {
+  fs.readFile("./public/db.json", function (err, data) {
+    if (err) throw err;
 
-app.use(routes);
-
-// app listening 
-app.listen(PORT, () => {
-    console.log(`App running on port ${PORT}!`);
+    let dbNotes = JSON.parse(data);
+    res.send(dbNotes);
   });
-  
+});
+
+// Delete selected note
+app.delete("/api/notes/:id", function (req, res) {
+  fs.readFile("./public/db.json", function (err, data) {
+    if (err) throw err;
+
+    let result = JSON.parse(data);
+    res.send(result);
+
+    var chosen = req.params.id;
+    var noteArray = [];
+
+    for (i = 0; i < result.length; i++) {
+      let dbNotes = result[i];
+      if (chosen === dbNotes.id) {
+        noteArray = noteArray;
+      } else {
+        noteArray.push(dbNotes);
+      }
+    }
+
+    let jsonAllNotes = JSON.stringify(noteArray);
+
+    fs.writeFileSync("./public/db.json", jsonAllNotes, function (err) {
+      if (err) throw err;
+      console.log("Saved db.json");
+    });
+  });
+});
+
+// Create New notes - takes in JSON input
+app.post("/api/notes", function (req, res) {
+  // req.body hosts is equal to the JSON post sent from the user
+  // This works because of our body parsing middleware
+  var newNote = req.body;
+  newNote.id = newNote.title.replace(/\s+/g, "").toLowerCase();
+  var noteArray = [];
+
+  fs.readFile("./public/db.json", function (err, data) {
+    if (err) throw err;
+    let result = JSON.parse(data);
+    res.send(result);
+
+    for (i = 0; i < result.length; i++) {
+      let dbNotes = result[i];
+      noteArray.push(dbNotes);
+    }
+
+    noteArray.push(newNote);
+    //console.log(noteArray);
+
+    let jsonAllNotes = JSON.stringify(noteArray);
+
+    fs.writeFileSync("./public/db.json", jsonAllNotes, function (err) {
+      if (err) throw err;
+      console.log("New note added to db");
+    });
+  });
+});
+
+// Starts the server to begin listening
+// =============================================================
+app.listen(PORT, function () {
+  console.log("App listening on PORT " + PORT);
+});
